@@ -1,0 +1,8 @@
+﻿{
+  "batchAccountName": "weatherapibatch",
+  "batchAccountKey": "Bh5S4+gT6JfupinnklQ7GBE0HbiV3Q4HWAo2Vi87cQgXUsZKMi/I+qYC0QbCkrEENLOPH6iaCNsSsEvan3vDSA==",
+  "batchServiceUrl": "https://weatherapibatch.eastus.batch.azure.com",
+  "storageAccountName": "teststoragebyfahad",
+  "storageAccountKey": "e25aHEQ0vvKO/EvCo8XiDTAoC3SFg9zM4Lz9Qzdh1x/eo+23mDBlfYYQDMQ4oj7ONSfXYzyzTsBUBzAdKM8/Aw==",
+  "storageServiceUrl": "core.windows.net"
+}
