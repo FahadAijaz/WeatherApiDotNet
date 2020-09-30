@@ -139,7 +139,15 @@
             },
             "Newtonsoft.Json": {
               "target": "Package",
-              "version": "[12.0.3, )"
+              "version": "[10.0.3, )"
+            },
+            "System.Runtime.Serialization.Primitives": {
+              "target": "Package",
+              "version": "[4.3.0, )"
+            },
+            "System.Threading.Tasks.Extensions": {
+              "target": "Package",
+              "version": "[4.5.4, )"
             },
             "WindowsAzure.Storage": {
               "target": "Package",

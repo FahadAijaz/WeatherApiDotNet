@@ -14,6 +14,7 @@ namespace Microsoft.Azure.Batch.Samples.TopNWordsSample
     using Microsoft.WindowsAzure.Storage.Blob;
     using Microsoft.Extensions.Configuration;
     using Common;
+    using System.Threading;
 
     /// <summary>
     /// In this sample, the Batch Service is used to process a set of input blobs in parallel on multiple 
@@ -34,6 +35,27 @@ namespace Microsoft.Azure.Batch.Samples.TopNWordsSample
         private const string MicrosoftBCLDllName = "Microsoft.Bcl.AsyncInterfaces.dll";
         private const string SystemTasksDllName = "System.Threading.Tasks.Extensions.dll";
         private const string TopnWordsConfig = "WeatherAPIDotNet.exe.config";
+        private const string SystemValueTupleDllName = "System.ValueTuple.dll";
+        private const string DependecyInjectionAbstractionsDllName = "Microsoft.Extensions.DependencyInjection.Abstractions.dll";
+        private const string DependecyInjectionDllName = "Microsoft.Extensions.DependencyInjection.dll";
+        private const string LoggingAbstractionsDllName = "Microsoft.Extensions.Logging.Abstractions.dll";
+        private const string DiagnosticssDllName = "System.Diagnostics.DiagnosticSource.dll";
+        private const string CachingAbstractionsDllName = "Microsoft.Extensions.Caching.Abstractions.dll";
+        private const string CachingMemoryDllName = "Microsoft.Extensions.Caching.Memory.dll";
+
+        private const string MicrosoftSqlServerDllName = "Microsoft.EntityFrameworkCore.SqlServer.dll";
+        private const string SystemComponentDllName = "System.ComponentModel.Annotations.dll";
+        private const string SystemCollectionsDllName = "System.Collections.Immutable.dll";
+        private const string pdllName = "Microsoft.Extensions.Primitives.dll";
+        private const string odllName = "Microsoft.Extensions.Options.dll";
+        private const string ldllName = "Microsoft.Extensions.Logging.dll";
+        private const string clientSqlClientDllName = "Microsoft.Data.SqlClient.dll";
+        private const string hashcodeDllName = "Microsoft.Bcl.HashCode.dll";
+        private const string configAbstractionDllName = "Microsoft.Extensions.Configuration.Abstractions.dll";
+        private const string SNIDllName = "x64/SNI.dll";
+
+
+        private const string relationddllName = "Microsoft.EntityFrameworkCore.Relational.dll";
         public static void JobMain(string[] args)
         {
             //Load the configuration
@@ -68,8 +90,22 @@ namespace Microsoft.Azure.Batch.Samples.TopNWordsSample
                     virtualMachineSize: "standard_d1_v2",
                     cloudServiceConfiguration: new CloudServiceConfiguration(osFamily: "6"));
                 Console.WriteLine("Adding pool {0}", topNWordsConfiguration.PoolId);
-                GettingStartedCommon.CreatePoolIfNotExistAsync(client, pool).Wait();
+                pool.TaskSchedulingPolicy = new TaskSchedulingPolicy(ComputeNodeFillType.Spread);
 
+                GettingStartedCommon.CreatePoolIfNotExistAsync(client, pool).Wait();
+                var formula = @"startingNumberOfVMs = 2;
+                    maxNumberofVMs = 4;
+                    pendingTaskSamplePercent = $PendingTasks.GetSamplePercent(90 * TimeInterval_Second);
+                    pendingTaskSamples = pendingTaskSamplePercent < 70 ? startingNumberOfVMs : avg($PendingTasks.GetSample(180 * TimeInterval_Second));
+                    $TargetDedicatedNodes = min(maxNumberofVMs, pendingTaskSamples);
+                    $NodeDeallocationOption = taskcompletion;";
+                var noOfSeconds = 120;
+                Thread.Sleep(noOfSeconds * 1000);
+
+                client.PoolOperations.EnableAutoScale(
+                    poolId: topNWordsConfiguration.PoolId, autoscaleFormula: formula,
+                    autoscaleEvaluationInterval: TimeSpan.FromMinutes(5));
+                
                 try
                 {
                     Console.WriteLine("Creating job: " + topNWordsConfiguration.JobId);
@@ -91,7 +127,29 @@ namespace Microsoft.Azure.Batch.Samples.TopNWordsSample
                     FileToStage microsoftBCLDll = new FileToStage(MicrosoftBCLDllName, stagingStorageAccount);
                     FileToStage systemTasksDll = new FileToStage(SystemTasksDllName, stagingStorageAccount);
                     FileToStage topNWordsConfigFile = new FileToStage(TopnWordsConfig, stagingStorageAccount);
-                    
+                    FileToStage SystemValueTupleDll = new FileToStage(SystemValueTupleDllName, stagingStorageAccount);
+                    FileToStage DependencyInjectionAbstractionsDll = new FileToStage(DependecyInjectionAbstractionsDllName, stagingStorageAccount);
+                    FileToStage DependencyInjectionDll = new FileToStage(DependecyInjectionDllName, stagingStorageAccount);
+                    FileToStage LoggingAbstractionsDll = new FileToStage(LoggingAbstractionsDllName, stagingStorageAccount);
+                    FileToStage DiagnosticsDll = new FileToStage(DiagnosticssDllName, stagingStorageAccount);
+                    FileToStage CachingAbstractionDll = new FileToStage(CachingAbstractionsDllName, stagingStorageAccount);
+                    FileToStage MicrosoftSqlServerDll = new FileToStage(MicrosoftSqlServerDllName, stagingStorageAccount);
+                    FileToStage SystemComponentDll = new FileToStage(SystemComponentDllName, stagingStorageAccount);
+                    FileToStage SystemCollectionsDll = new FileToStage(SystemCollectionsDllName, stagingStorageAccount);
+                    FileToStage pDll = new FileToStage(pdllName, stagingStorageAccount);
+                    FileToStage oDll = new FileToStage(odllName, stagingStorageAccount);
+                    FileToStage lDll = new FileToStage(ldllName, stagingStorageAccount);
+                    FileToStage hashcodeDll = new FileToStage(hashcodeDllName, stagingStorageAccount);
+                    FileToStage clientSqlDll = new FileToStage(clientSqlClientDllName, stagingStorageAccount);
+                    FileToStage cachingMemoryDll = new FileToStage(CachingMemoryDllName, stagingStorageAccount);
+                    FileToStage configAbstractionDll = new FileToStage(configAbstractionDllName, stagingStorageAccount);
+                    FileToStage SNIDll = new FileToStage(SNIDllName, stagingStorageAccount);
+
+
+                    FileToStage relationDll = new FileToStage(relationddllName, stagingStorageAccount);
+
+
+
 
                     var textFile = "E:\\WeatherAPIPOC\\cities_id.txt";
                     var text = File.ReadAllLines(textFile);
@@ -114,7 +172,7 @@ namespace Microsoft.Azure.Batch.Samples.TopNWordsSample
                     {
                         CloudTask task = new CloudTask(
                             id: $"task_no_{i + 1}",
-                            commandline: $"{TopNWordsExeName} --Task {cityList[i]}");
+                            commandline: $"cmd /c mkdir x64 & move SNI.dll x64 & {TopNWordsExeName} --Task {cityList[i]} %AZ_BATCH_NODE_ID%");
 
                         //This is the list of files to stage to a container -- for each job, one container is created and 
                         //files all resolve to Azure Blobs by their name (so two tasks with the same named file will create just 1 blob in
@@ -128,7 +186,26 @@ namespace Microsoft.Azure.Batch.Samples.TopNWordsSample
                             microsoftEFCoreDll,
                             microsoftBCLDll,
                             systemTasksDll,
-                            topNWordsConfigFile
+                            topNWordsConfigFile,
+                            SystemValueTupleDll,
+                            DependencyInjectionAbstractionsDll,
+                            DependencyInjectionDll,
+                            LoggingAbstractionsDll,
+                            DiagnosticsDll,
+                            CachingAbstractionDll,
+                            MicrosoftSqlServerDll,
+                            SystemComponentDll,
+                            SystemCollectionsDll,
+                            oDll,
+                            pDll,
+                            lDll,
+                            relationDll,
+                            hashcodeDll,
+                            clientSqlDll,
+                            cachingMemoryDll,
+                            configAbstractionDll,
+                            SNIDll
+
                         };
 
                         tasksToRun.Add(task);

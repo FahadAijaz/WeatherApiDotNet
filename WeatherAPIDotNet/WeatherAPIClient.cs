@@ -26,20 +26,26 @@ namespace Microsoft.Azure.Batch.Samples.TopNWordsSample
         public static async Task TaskMain(string[] args)
         {
             long num = Int64.Parse(args[1]);
+            string nodeId = args[2];
             using (var httpClient = new HttpClient())
             {
                 var apiUrl = String.Format("http://api.openweathermap.org/data/2.5/weather?id={0}&appid=b4db3a51a5c883e2244c5a4e977e3ec9", num);
-                using (var response = await httpClient.GetAsync(apiUrl))
+                using (var response = httpClient.GetAsync(apiUrl).Result)
                 {
 
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     Console.WriteLine(apiResponse.ToString());
                     var weatherData = WeatherData.FromJson(apiResponse);
+                    string timenow = DateTime.Now.ToString("h:mm:ss tt");
                     Console.WriteLine(apiResponse.ToString());
-                    Console.WriteLine(weatherData.Sys.Id);
+                    weatherData.CurrentTime = timenow;
+                    weatherData.NodeId = nodeId;
                     WeatherAPIContext context = new WeatherAPIContext();
+                    Console.WriteLine("before add weather data");
                     context.WeatherData.Add(weatherData);
+                    Console.WriteLine("after add weather data");
                     context.SaveChanges();
+                    Console.WriteLine("after add save changes");
                 }
             }
         }
@@ -86,6 +92,8 @@ namespace Microsoft.Azure.Batch.Samples.TopNWordsSample
 
         [JsonProperty("cod")]
         public long Cod { get; set; }
+        public string CurrentTime { get; set; }
+        public string NodeId { get; set; }
     }
 
     [Owned]

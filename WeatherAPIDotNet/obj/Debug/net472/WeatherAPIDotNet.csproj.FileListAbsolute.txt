@@ -1,7 +1,3 @@
-E:\WeatherApiDotNet\WeatherAPIDotNet\WeatherAPIDotNet\obj\Debug\net472\WeatherAPIDotNet.csprojAssemblyReference.cache
-E:\WeatherApiDotNet\WeatherAPIDotNet\WeatherAPIDotNet\obj\Debug\net472\WeatherAPIDotNet.AssemblyInfoInputs.cache
-E:\WeatherApiDotNet\WeatherAPIDotNet\WeatherAPIDotNet\obj\Debug\net472\WeatherAPIDotNet.AssemblyInfo.cs
-E:\WeatherApiDotNet\WeatherAPIDotNet\WeatherAPIDotNet\obj\Debug\net472\WeatherAPIDotNet.csproj.CoreCompileInputs.cache
 E:\WeatherApiDotNet\WeatherAPIDotNet\WeatherAPIDotNet\bin\Debug\net472\accountsettings.json
 E:\WeatherApiDotNet\WeatherAPIDotNet\WeatherAPIDotNet\bin\Debug\net472\settings.json
 E:\WeatherApiDotNet\WeatherAPIDotNet\WeatherAPIDotNet\bin\Debug\net472\WeatherAPIDotNet.exe.config
@@ -67,7 +63,11 @@ E:\WeatherApiDotNet\WeatherAPIDotNet\WeatherAPIDotNet\bin\Debug\net472\zh-Hans\M
 E:\WeatherApiDotNet\WeatherAPIDotNet\WeatherAPIDotNet\bin\Debug\net472\zh-Hant\Microsoft.Data.SqlClient.resources.dll
 E:\WeatherApiDotNet\WeatherAPIDotNet\WeatherAPIDotNet\bin\Debug\net472\Microsoft.Azure.Batch.Samples.Common.dll
 E:\WeatherApiDotNet\WeatherAPIDotNet\WeatherAPIDotNet\bin\Debug\net472\Microsoft.Azure.Batch.Samples.Common.pdb
+E:\WeatherApiDotNet\WeatherAPIDotNet\WeatherAPIDotNet\obj\Debug\net472\WeatherAPIDotNet.csprojAssemblyReference.cache
+E:\WeatherApiDotNet\WeatherAPIDotNet\WeatherAPIDotNet\obj\Debug\net472\WeatherAPIDotNet.exe.config
+E:\WeatherApiDotNet\WeatherAPIDotNet\WeatherAPIDotNet\obj\Debug\net472\WeatherAPIDotNet.AssemblyInfoInputs.cache
+E:\WeatherApiDotNet\WeatherAPIDotNet\WeatherAPIDotNet\obj\Debug\net472\WeatherAPIDotNet.AssemblyInfo.cs
 E:\WeatherApiDotNet\WeatherAPIDotNet\WeatherAPIDotNet\obj\Debug\net472\WeatherAPIDotNet.csproj.CopyComplete
 E:\WeatherApiDotNet\WeatherAPIDotNet\WeatherAPIDotNet\obj\Debug\net472\WeatherAPIDotNet.exe
 E:\WeatherApiDotNet\WeatherAPIDotNet\WeatherAPIDotNet\obj\Debug\net472\WeatherAPIDotNet.pdb
-E:\WeatherApiDotNet\WeatherAPIDotNet\WeatherAPIDotNet\obj\Debug\net472\WeatherAPIDotNet.exe.config
+E:\WeatherApiDotNet\WeatherAPIDotNet\WeatherAPIDotNet\obj\Debug\net472\WeatherAPIDotNet.csproj.CoreCompileInputs.cache

@@ -1,11 +1,11 @@
 ﻿{
   "numberOfTasks": 70,
-  "poolNodeCount": 3,
+  "poolNodeCount": 2,
   "topWordCount": 10,
   "fileName": "book.txt",
   "shouldDeleteJob": true,
   "shouldDeletePool": false,
   "shouldDeleteContainer": true,
-  "poolId": "TopNWordsPool43",
-  "jobId": "TopNWordsJob43"
+  "poolId": "TopNWordsPool94",
+  "jobId": "TopNWordsJob94"
 }
