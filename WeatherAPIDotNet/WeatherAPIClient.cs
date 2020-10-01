@@ -25,27 +25,30 @@ namespace Microsoft.Azure.Batch.Samples.TopNWordsSample
     {
         public static async Task TaskMain(string[] args)
         {
+            string programStartTime = DateTime.Now.ToString("h:mm:sstt");
             long num = Int64.Parse(args[1]);
             string nodeId = args[2];
+            string programLaunchTime = args[3];
             using (var httpClient = new HttpClient())
             {
                 var apiUrl = String.Format("http://api.openweathermap.org/data/2.5/weather?id={0}&appid=b4db3a51a5c883e2244c5a4e977e3ec9", num);
                 using (var response = httpClient.GetAsync(apiUrl).Result)
                 {
-
+                    string timeBeforeCall = DateTime.Now.ToString("h:mm:sstt");
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine(apiResponse.ToString());
                     var weatherData = WeatherData.FromJson(apiResponse);
-                    string timenow = DateTime.Now.ToString("h:mm:ss tt");
-                    Console.WriteLine(apiResponse.ToString());
-                    weatherData.CurrentTime = timenow;
+                    string timeAfterCall = DateTime.Now.ToString("h:mm:sstt");
                     weatherData.NodeId = nodeId;
                     WeatherAPIContext context = new WeatherAPIContext();
-                    Console.WriteLine("before add weather data");
+
+                    weatherData.BeforeAPICallTime = timeBeforeCall;
+                    weatherData.AfterAPICallTime = timeAfterCall;
+                    weatherData.ProgramStartTime = programStartTime;
+                    weatherData.ProgramLaunchTime = programLaunchTime;
+                    string timeOfInsertion = DateTime.Now.ToString("h:mm:sstt");
+                    weatherData.InsertionTime = timeOfInsertion;
                     context.WeatherData.Add(weatherData);
-                    Console.WriteLine("after add weather data");
                     context.SaveChanges();
-                    Console.WriteLine("after add save changes");
                 }
             }
         }
@@ -92,8 +95,12 @@ namespace Microsoft.Azure.Batch.Samples.TopNWordsSample
 
         [JsonProperty("cod")]
         public long Cod { get; set; }
-        public string CurrentTime { get; set; }
+        public string InsertionTime { get; set; }
         public string NodeId { get; set; }
+        public string ProgramLaunchTime { get; set; }
+        public string ProgramStartTime { get; set; }
+        public string BeforeAPICallTime { get; set; }
+        public string AfterAPICallTime { get; set; }
     }
 
     [Owned]

@@ -91,6 +91,7 @@ namespace Microsoft.Azure.Batch.Samples.TopNWordsSample
                     cloudServiceConfiguration: new CloudServiceConfiguration(osFamily: "6"));
                 Console.WriteLine("Adding pool {0}", topNWordsConfiguration.PoolId);
                 pool.TaskSchedulingPolicy = new TaskSchedulingPolicy(ComputeNodeFillType.Spread);
+                pool.MaxTasksPerComputeNode = 4;
 
                 GettingStartedCommon.CreatePoolIfNotExistAsync(client, pool).Wait();
                 var formula = @"startingNumberOfVMs = 2;
@@ -99,7 +100,7 @@ namespace Microsoft.Azure.Batch.Samples.TopNWordsSample
                     pendingTaskSamples = pendingTaskSamplePercent < 70 ? startingNumberOfVMs : avg($PendingTasks.GetSample(180 * TimeInterval_Second));
                     $TargetDedicatedNodes = min(maxNumberofVMs, pendingTaskSamples);
                     $NodeDeallocationOption = taskcompletion;";
-                var noOfSeconds = 120;
+                var noOfSeconds = 150;
                 Thread.Sleep(noOfSeconds * 1000);
 
                 client.PoolOperations.EnableAutoScale(
@@ -170,9 +171,10 @@ namespace Microsoft.Azure.Batch.Samples.TopNWordsSample
 
                     for (int i = 0; i < cityList.Count; i++)
                     {
+                        string programLaunchTime = DateTime.Now.ToString("h:mm:sstt");
                         CloudTask task = new CloudTask(
                             id: $"task_no_{i + 1}",
-                            commandline: $"cmd /c mkdir x64 & move SNI.dll x64 & {TopNWordsExeName} --Task {cityList[i]} %AZ_BATCH_NODE_ID%");
+                            commandline: $"cmd /c mkdir x64 & move SNI.dll x64 & {TopNWordsExeName} --Task {cityList[i]} %AZ_BATCH_NODE_ID% {programLaunchTime}");
 
                         //This is the list of files to stage to a container -- for each job, one container is created and 
                         //files all resolve to Azure Blobs by their name (so two tasks with the same named file will create just 1 blob in
